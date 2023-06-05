@@ -31,7 +31,7 @@ Output (-o)- Diretório onde os resultados serão depositados. O output deve ser
 
 ## Rodando o teste do OptiType
 Para rodar o teste do OptiType, siga o seguinte passo a passo:
-  1. Copie o diretório do github do OptiType para seu computador: ```git clone https://github.com/FRED-2/OptiType.git```;
+  1. Copie o diretório do github do OptiType para seu computador: ```git clone https://github.com/FRED-2/OptiType.git```
   2. Copie os arquivos testes para o seu diretório de análise:
 ```
 ## Para o teste com dados de DNA:
