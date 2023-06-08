@@ -1,67 +1,81 @@
-# Guia
-Esse é um guia simples para instalar e rodar a ferramenta de tipagem de HLA [OptiType](https://github.com/FRED-2/OptiType) a partir da linha de comando. 
+# OptiType Guide
+This is a simple guide to install and run the HLA typing tool [OptiType](https://github.com/FRED-2/OptiType) from command line. 
 
-Referência: [SZOLEK, et al. OptiType: precision HLA typing from next-generation sequencing data. 2014](https://pubmed.ncbi.nlm.nih.gov/25143287/).
+Reference: [SZOLEK, et al. OptiType: precision HLA typing from next-generation sequencing data. 2014](https://pubmed.ncbi.nlm.nih.gov/25143287/).
 
-## Dependências
-Apesar do OptiType utilizar uma série de programas (Python, RazerS, SAMtools, HDF5, CPLEX) e módulos do Python (NumPy, Pyomo, PyTables, Pandas, Pysam, Matplotlib, Future) para funcionar, a instalação de cada uma das ferramentas em seu computador não é obrigatória.
+## Dependencies
+Despite OptiType utilizing a series of programs (Python, RazerS, SAMtools, HDF5, CPLEX) and Python modules (NumPy, Pyomo, PyTables, Pandas, Pysam, Matplotlib, Future) to function, the installation of each tool on your computer is not mandatory.
 
-A ferramenta está disponibilizada via Docker, uma plataforma que possibilita o empacotamento de uma aplicação ou ambiente dentro de um container, permitindo que qualquer pessoa possa executar o programa, desde que o Docker esteja instalado em seu computador. Para instalar o Docker, basta acessar a [página](https://www.docker.com/) deles e baixar o executável, e seguir o [passo a passo de instalação](https://docs.docker.com/engine/install/) (Docker está disponível para todos os sistemas operacionais).
 
-## Instalando o OptiType
-Com o docker instalado, faremos a instalação do OptiType. Para isso, basta usar o comando ```docker pull fred2/optitype```.
-
-## Como rodar o OptiType
-Após baixar a imagem do Docker, basta usar a linha de comando abaixo para rodar o OptiType:
+The tool is available via Docker, a platform that enables the packaging of an application or environment within a container, allowing anyone to run the program as long as Docker is installed on their computer. To install Docker, run the following the commands below:
 
 ```
-mkdir /caminho/para/o/seu/diretório/resultado/
-chmod 777 /caminho/para/o/seu/diretório/resultado/
-docker run -v /caminho/para/o/seu/diretório/:/data/ -t fred2/optitype -i input1 [input2] (-r|-d) -o /data/resultado/
-```
-Sendo as flags:
-
-```
-Verbose (-v)-  Caminho para o diretório em seu computador onde o dado que terá o HLA tipado pelo Optitype. Esse caminho deve ser direcionado para o diretório /data/ dentro da imagem do docker através da utilização de (:) (Exemplo: /caminho/para/o/seu/diretório/:/data/)
-Image tag (-t fred2/optitype)- Imagem que está sendo chamada para excução pelo docker 
-Input (-i)- Arquivo(s) .fastq ou arquivos .bam gerados anteriormente pelo próprio OptiType, e guardados para reanálise. Um arquivo: modo single-end, dois arquivos: modo paired-end.
-RNA/DNA (-r|-d)- Indica se o dado de sequenciamento provém de sequenciamento de DNA ou RNA 
-Output (-o)- Diretório onde os resultados serão depositados. O output deve ser o diretório /data/resultado/ da imagem do docker.
+sudo apt update
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+apt-cache policy docker-ce
+sudo apt install docker-ce
 ```
 
-## Rodando o teste do OptiType
-Para rodar o teste do OptiType, siga o seguinte passo a passo:
-  1. Copie o diretório do github do OptiType para seu computador: ```git clone https://github.com/FRED-2/OptiType.git```
-  2. Copie os arquivos testes para o seu diretório de análise:
-```
-## Para o teste com dados de DNA:
-cp OptiType/test/exome/* /caminho/para/o/seu/diretório/
+In its [page](https://www.docker.com/) they offer executables to download and install docker in your machine. To install docker by this way, follow the [step-by-step installation guide](https://docs.docker.com/engine/install/) (Docker is available for all operating systems).
 
-## Para o teste com dados de RNA:
-cp OptiType/test/rna/* /caminho/para/o/seu/diretório/
-```
-  3. Crie uma pasta de resultado no seu diretório e de permissões globais para a pasta:
-```
-## Criar o diretório de resultado:
-mkdir /caminho/para/o/seu/diretório/resultado/
+## Installing OptiType
+With Docker installed, we will proceed with the installation of OptiType. To do this, simply use the command: ```docker pull fred2/optitype```.
 
-## Dê permissões globais para o diretório de resultado:
-chmod 777 /caminho/para/o/seu/diretório/resultado/
-```
-  4. Rode o comando:
-```
-## Comando para o teste com dado de DNA:
-docker run --name test -v /caminho/para/o/seu/diretório/:/data/ -t fred2/optitype -i NA11995_SRR766010_1_fished.fastq NA11995_SRR766010_2_fished.fastq -d -o /data/result/ -v
-
-## Comando para o teste com dado de RNA:
-docker run --name test -v /caminho/para/o/seu/diretório/:/data/ -t fred2/optitype -i CRC_81_N_1_fished.fastq CRC_81_N_2_fished.fastq -r -o /data/result/ -v
-```
-  5. Para visualizar o resultado basta utilizar o comando abaixo:
+## How to run OptiType
+After downloading the Docker image, you can use the following command to run OptiType:
 
 ```
-less -S /caminho/para/o/seu/diretório/resultado/data_hora/data_hora_result.tsv
+mkdir /path/to/your/directory/results/
+chmod 777 /path/to/your/directory/results/
+docker run -v /path/to/your/directory/:/data/ -t fred2/optitype -i input1 [input2] (-r|-d) -o /data/results/
 ```
-O resultado deve ser igual a este: 
+The flags for OptiType are:
+
+```
+Verbose (-v)-  The path to the directory on your computer where the data to be HLA typed by OptiType is located should be directed to the /data/ directory within the Docker image using (:) (Example: /path/to/your/directory/:/data/)
+Image tag (-t fred2/optitype)- Docker image of OptiType 
+Input (-i)- .fastq file(s) or .bam file (previous generated by OptiType, and stored for reanalysis). One file: single-end mode; Two files: paired-end mode.
+RNA/DNA (-r|-d)- Indicates type os sequencing: DNA or RNA 
+Output (-o)- Where the analysis results will be generated. The output should be directed to the /data/results/ directory.
+```
+
+## Running OptiType test
+To run the OptiType test, follow the step-by-step instructions below:
+
+  1. Copy the OptiType GitHub directory to your computer: ```git clone https://github.com/FRED-2/OptiType.git```
+  2. Copy the test files to your analysis directory:
+
+```
+## For DNA data test:
+cp OptiType/test/exome/* /path/to/your/directory/
+
+## For RNA data test:
+cp OptiType/test/rna/* /path/to/your/directory/
+```
+  3. Create a "results" folder in your directory and grant global permissions to the folder.
+```
+##  Create a "results" folder:
+mkdir /path/to/your/directory/results/
+
+## Grant global permissions to the "results" directory
+chmod 777 /path/to/your/directory/results/
+```
+  4. Run the following commands:
+```
+## Command for DNA data testing:
+docker run --name test -v /path/to/your/directory/:/data/ -t fred2/optitype -i NA11995_SRR766010_1_fished.fastq NA11995_SRR766010_2_fished.fastq -d -o /data/results/ -v
+
+## Command for RNA data testing:
+docker run --name test -v /path/to/your/directory/:/data/ -t fred2/optitype -i CRC_81_N_1_fished.fastq CRC_81_N_2_fished.fastq -r -o /data/results/ -v
+```
+  5. To view the result, simply use the following command:
+
+```
+less -S /path/to/your/directory/results/data_hour/data_hour_result.tsv
+```
+The result should be as follows:
 
 | A1	| A2	| B1	| B2	| C1	| C2	| Reads	| Objective |
 | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
